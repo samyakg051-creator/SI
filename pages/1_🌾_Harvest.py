@@ -39,14 +39,6 @@ section[data-testid="stSidebar"] label, section[data-testid="stSidebar"] p, sect
 .page-header h1   { font-size: 2.2rem; font-weight: 900; color: #fff; margin: 0; line-height: 1.1; }
 .page-header p    { font-size: 0.95rem; color: #a8d5ba; margin: 6px 0 0; }
 
-.input-section {
-    background: #fff;
-    border: 1px solid #d4e6c3;
-    border-radius: 18px;
-    padding: 28px 28px 20px;
-    margin-bottom: 24px;
-    box-shadow: 0 2px 8px #2d6a4f08;
-}
 
 .window-card {
     background: linear-gradient(135deg, #2d6a4f 0%, #1a3d2e 100%);
@@ -112,7 +104,7 @@ crop_opts = list(CROP_MATURITY_DAYS.keys())
 inp_col, map_col = st.columns([1, 1.7])
 
 with inp_col:
-    st.markdown('<div class="input-section">', unsafe_allow_html=True)
+
     _def_crop = get_shared("crop")
     crop = st.selectbox(t("Select Crop", lang_code), crop_opts,
                         index=crop_opts.index(_def_crop) if _def_crop in crop_opts else 0,
@@ -122,12 +114,12 @@ with inp_col:
     sowing_date = st.date_input(t("Sowing Date", lang_code), value=_def_sow,
                                 max_value=datetime.date.today(), format="DD/MM/YYYY")
     run = st.button(f"🔍 {t('Get Recommendation', lang_code)}", type="primary", use_container_width=True)
-    st.markdown('</div>', unsafe_allow_html=True)
+
 
 with map_col:
-    st.markdown('<div class="input-section">', unsafe_allow_html=True)
+
     district = render_district_selector("harvest", lang_code, crop=crop)
-    st.markdown('</div>', unsafe_allow_html=True)
+
 
 sync_all(crop=crop, district=district, sowing=sowing_date)
 

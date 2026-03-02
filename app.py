@@ -55,19 +55,20 @@ div[data-testid="stSelectbox"] > div > div { background-color: #0e2a1c !importan
 .hero-logo { font-size: 2.4rem; }
 .hero-title { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; color: #fff; margin: 0; }
 .hero-subtitle { color: #a8d5ba; font-size: 0.85rem; margin-top: 2px; }
-.score-card { background: linear-gradient(135deg, #2d6a4f, #1a3d2e); border-radius: 20px; padding: 2rem; text-align: center; margin-bottom: 1rem; color: #fff; box-shadow: 0 4px 20px #2d6a4f22; }
-.score-number { font-family: 'Syne', sans-serif; font-size: 5.5rem; font-weight: 800; line-height: 1; color: #6ee86e; }
-.score-denom { font-size: 1.2rem; color: #a8d5ba; margin-top: 4px; }
-.score-badge { display: inline-flex; align-items: center; gap: 8px; padding: 0.4rem 1.1rem; border-radius: 20px; font-size: 0.88rem; font-weight: 600; margin: 0.8rem auto 0.4rem auto; }
+.score-card { background: linear-gradient(135deg, #2d6a4f, #1a3d2e); border-radius: 16px; padding: 1rem 1.5rem; text-align: center; margin-bottom: 1rem; color: #fff; box-shadow: 0 4px 20px #2d6a4f22; display: flex; align-items: center; justify-content: center; gap: 2rem; flex-wrap: wrap; }
+.score-left { display: flex; flex-direction: column; align-items: center; }
+.score-number { font-family: 'Syne', sans-serif; font-size: 3.2rem; font-weight: 800; line-height: 1; color: #6ee86e; }
+.score-denom { font-size: 0.9rem; color: #a8d5ba; margin-top: 2px; }
+.score-badge { display: inline-flex; align-items: center; gap: 6px; padding: 0.25rem 0.8rem; border-radius: 20px; font-size: 0.76rem; font-weight: 600; margin: 0.4rem auto 0.2rem auto; }
 .badge-green  { background: #d4edda; color: #155724; }
 .badge-yellow { background: #fff3cd; color: #856404; }
 .badge-red    { background: #f8d7da; color: #721c24; }
-.score-tagline { font-size: 0.82rem; color: #a8d5ba; margin-top: 4px; }
-.component-scores { display: flex; justify-content: center; gap: 2rem; margin-top: 1.2rem; flex-wrap: wrap; }
-.comp-item { text-align: center; background: #1a3d2e; border-radius: 10px; padding: 0.6rem 1rem; }
-.comp-label { font-size: 0.72rem; color: #a8d5ba; text-transform: uppercase; letter-spacing: 0.06em; }
-.comp-value { font-size: 1rem; font-weight: 700; color: #fff; }
-.comp-value span { font-size: 0.78rem; color: #a8d5ba; }
+.score-tagline { font-size: 0.72rem; color: #a8d5ba; margin-top: 2px; }
+.component-scores { display: flex; justify-content: center; gap: 0.6rem; flex-wrap: wrap; }
+.comp-item { text-align: center; background: #1a3d2e; border-radius: 8px; padding: 0.4rem 0.8rem; }
+.comp-label { font-size: 0.65rem; color: #a8d5ba; text-transform: uppercase; letter-spacing: 0.06em; }
+.comp-value { font-size: 0.88rem; font-weight: 700; color: #fff; }
+.comp-value span { font-size: 0.7rem; color: #a8d5ba; }
 .section-card { background: #fff; border: 1px solid #d4e6c3; border-radius: 14px; padding: 1.4rem 1.6rem; margin-bottom: 1rem; box-shadow: 0 2px 8px #2d6a4f08; }
 .section-title { font-size: 0.78rem; font-weight: 700; color: #2d6a4f; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
 .metric-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
@@ -235,10 +236,12 @@ if st.session_state.analysis_done:
     # ── Score Card ────────────────────────────────────────────────────────
     st.markdown(f"""
     <div class="score-card">
-        <div class="score-number">{int(sr.final_score)}</div>
-        <div class="score-denom">/ 100</div>
-        <div><span class="score-badge {bc}">{bd} {bt}</span></div>
-        <div class="score-tagline">{tg}</div>
+        <div class="score-left">
+            <div class="score-number">{int(sr.final_score)}</div>
+            <div class="score-denom">/ 100</div>
+            <div><span class="score-badge {bc}">{bd} {bt}</span></div>
+            <div class="score-tagline">{tg}</div>
+        </div>
         <div class="component-scores">
             <div class="comp-item"><div class="comp-label">{t('Price', lang)}</div><div class="comp-value">{pr.price_score:.1f}<span>/30</span></div></div>
             <div class="comp-item"><div class="comp-label">{t('Weather', lang)}</div><div class="comp-value">{sr.weather_score:.1f}<span>/30</span></div></div>
@@ -496,33 +499,7 @@ if st.session_state.analysis_done:
         <div class="explanation-text">{et}</div>
     </div>""", unsafe_allow_html=True)
 
-    st.markdown(f'<div class="chat-card"><div class="chat-title">🤖 {t("AgriChain AI", lang)}</div>', unsafe_allow_html=True)
-    for msg in st.session_state.chat_history:
-        css = "chat-msg-user" if msg["role"]=="user" else "chat-msg-ai"
-        pfx = "🧑‍🌾" if msg["role"]=="user" else "🤖"
-        st.markdown(f'<div class="{css}">{pfx} {msg["content"]}</div>', unsafe_allow_html=True)
 
-    with st.form(key="chat_form", clear_on_submit=True):
-        ci, cs = st.columns([5,1])
-        with ci:
-            user_input = st.text_input("Ask AI", placeholder=t('Ask anything', lang), label_visibility="collapsed")
-        with cs:
-            send_btn = st.form_submit_button("Send ↑")
-    st.markdown('</div>', unsafe_allow_html=True)
-
-    if send_btn and user_input.strip():
-        if not groq_api_key:
-            st.warning("Please add your Groq API key in .env to use the AI assistant.")
-        else:
-            with st.spinner("AgriChain AI is thinking..."):
-                try:
-                    response = get_ai_response(api_key=groq_api_key, user_message=user_input.strip(),
-                        context=st.session_state.ai_context, chat_history=st.session_state.chat_history)
-                    st.session_state.chat_history.append({"role":"user","content":user_input.strip()})
-                    st.session_state.chat_history.append({"role":"assistant","content":response})
-                    st.rerun()
-                except Exception as e:
-                    st.error(f"AI error: {str(e).encode('ascii',errors='replace').decode('ascii')}")
 else:
     st.markdown(f"""
     <div class="score-card" style="opacity:0.6;">

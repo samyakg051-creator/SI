@@ -39,14 +39,6 @@ section[data-testid="stSidebar"] label, section[data-testid="stSidebar"] p, sect
 .page-header h1   { font-size: 2.2rem; font-weight: 900; color: #fff; margin: 0; line-height: 1.1; }
 .page-header p    { font-size: 0.95rem; color: #7eb8f0; margin: 6px 0 0; }
 
-.input-section {
-    background: #fff;
-    border: 1px solid #d4e6c3;
-    border-radius: 18px;
-    padding: 28px 28px 20px;
-    margin-bottom: 24px;
-    box-shadow: 0 2px 8px #2d6a4f08;
-}
 
 .mandi-card {
     border-radius: 18px;
@@ -125,7 +117,7 @@ init_shared()
 inp_col, map_col = st.columns([1, 1.7])
 
 with inp_col:
-    st.markdown('<div class="input-section">', unsafe_allow_html=True)
+
     _def_crop = get_shared("crop")
     crop      = st.selectbox(t("Select Crop", lang_code), CROPS,
                              index=CROPS.index(_def_crop) if _def_crop in CROPS else 0,
@@ -134,12 +126,12 @@ with inp_col:
                                 min_value=1.0, max_value=5000.0,
                                 value=float(get_shared("quantity") or 50.0), step=5.0)
     run = st.button(f"🔍 {t('Find Best Mandis', lang_code)}", type="primary", use_container_width=True)
-    st.markdown('</div>', unsafe_allow_html=True)
+
 
 with map_col:
-    st.markdown('<div class="input-section">', unsafe_allow_html=True)
+
     district = render_district_selector("mandi", lang_code, crop=crop)
-    st.markdown('</div>', unsafe_allow_html=True)
+
 
 sync_all(crop=crop, district=district, quantity=quantity)
 

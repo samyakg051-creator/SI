@@ -63,6 +63,7 @@ def render_sidebar(current_page: str = "") -> str:
             ("spoilage","⚠️", "Spoilage Assessor",  "pages/3_⚠️_Spoilage.py"),
             ("spoilage_prev","🛡️","Spoilage Prevention","pages/2_Spoilage_Prevention.py"),
             ("map",     "🗺️", "Map Explorer",       "pages/4_Map_Explorer.py"),
+            ("ai_chat", "🤖", "AI Chat",            "pages/5_🤖_AI_Chat.py"),
         ]
 
         for key, icon, label, path in _PAGES:
